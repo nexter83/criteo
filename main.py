@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import date, timedelta
 
 
-def get_token(client_id,client_secret):
+def get_token(client_id, client_secret, url):
   payload = {
     'client_id': client_id,
     'client_secret': client_secret,
@@ -25,7 +25,7 @@ def get_token(client_id,client_secret):
     print(r.text)
 
 
-def get_stat(dateStart, dateEnd):
+def get_stat(dateStart, dateEnd, client_id, client_secret, url):
     payload = {
         'reportType': 'CampaignPerformance',
         'startDate': dateStart,
@@ -47,7 +47,7 @@ def get_stat(dateStart, dateEnd):
     headers = {
         'Content-Type': 'application/json',
         'Accept': 'application/octet-stream',
-        'Authorization': 'Bearer ' + get_token(client_id, client_secret)
+        'Authorization': 'Bearer ' + get_token(client_id, client_secret, url)
     }
 
     r = requests.post(url + '/v1/statistics', data=json.dumps(payload), headers=headers)
@@ -74,7 +74,7 @@ def main():
     dateEnd = date.today() - timedelta(1)
     dateEnd = dateEnd.strftime('%Y-%m-%d')
 
-    df = get_stat(dateStart, dateEnd)
+    df = get_stat(dateStart, dateEnd, client_id, client_secret, url)
 
 
 if __name__ == '__main__':
